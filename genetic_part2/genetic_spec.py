@@ -56,6 +56,7 @@ class GASolver:
             fitness = cities.road_length(city_dict, chromosome)
             new_individual = Individual(chromosome, fitness)
             self._population.append(new_individual)
+            print(chromosome)
 
     def evolve_for_one_generation(self):
         """ Apply the process for one generation : 
@@ -97,6 +98,9 @@ class GASolver:
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:]
             new_chrom = list(set(new_chrom))    # Remove duplicated cities (genes) 
 
+
+
+
             # Complete the chromosome with remaining cities until he has a valid length
             while len(new_chrom) != len(parent_a.chromosome) :
                 cities_available = [city for city in possible_cities if city not in new_chrom]
@@ -118,7 +122,6 @@ class GASolver:
                 new_chrom[mutation_point], new_chrom[mutation_point_2] = new_chrom[mutation_point_2], new_chrom[mutation_point]
                 new_indiv = Individual(new_chrom, cities.road_length(city_dict, new_chrom))
 
-            print(f'New chrom : {new_indiv.chromosome} \n path length : {new_indiv.fitness}')
             mutants.append(new_indiv)
 
         self._population = self._population + mutants 
@@ -145,14 +148,14 @@ class GASolver:
             best_individual = self.get_best_individual()
 
             if (threshold_fitness != None) and (best_individual.fitness <= threshold_fitness) :
-                print(f'Found : {i}')
+                print(f'Found : {best_individual}')
                 break
 
 seed = random.seed()
 city_dict = cities.load_cities("cities.txt")
 solver = GASolver()
 solver.reset_population()
-solver.evolve_until(1000, 392)    # Best obtainted : 391.79348316719285
+solver.evolve_until(500, 393)    # Best obtainted : 391.79348316719285
 best = solver.get_best_individual()
 print(best.chromosome)
 cities.draw_cities(city_dict, best.chromosome)
