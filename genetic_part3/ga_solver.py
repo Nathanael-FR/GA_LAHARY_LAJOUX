@@ -50,6 +50,9 @@ class GAProblem:
     def reproduction(self, chromosome_parent_a, chromosome_parent_b):
         pass 
     
+    def mutation_point(self, chromosome):
+        return random.randrange(0, len(chromosome))
+
     def mutation(self, chromosome):
         pass
 
@@ -83,6 +86,7 @@ class GASolver:
         for i in range(pop_size):
             chromosome = self._problem.generate()
             fitness = self._problem.score(chromosome)
+
             new_individual = Individual(chromosome, fitness)
             self._population.append(new_individual)
 
@@ -118,7 +122,8 @@ class GASolver:
             parent_a = self._population[selection_point] 
             parent_b = self._population[selection_point_2] 
 
-            x_point = random.randrange(0, len(parent_a.chromosome)) 
+            x_point = self._problem.mutation_point(parent_a.chromosome)
+
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:] 
             
             new_chrom = self._problem.reproduction(parent_a, parent_b, new_chrom)

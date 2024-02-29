@@ -13,7 +13,7 @@ import random
 
 class MastermindProblem(GAProblem):
     """Implementation of GAProblem for the mastermind problem"""
-    def __init__(self, match):
+    def __init__(self):
         super().__init__()
         
     def generate(self):
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     from ga_solver import GASolver
 
     match = mm.MastermindMatch(secret_size=6)
-    problem = MastermindProblem(match)
+    problem = MastermindProblem()
 
     solver = GASolver(problem)
 

@@ -93,19 +93,29 @@ class GASolver:
             # print(f' Parent A : {parent_a}\n')
             # print(f' Parent B : {parent_b}')
 
-            x_point = random.randrange(0, len(parent_a.chromosome))
+            x_point = random.randrange(0, len(parent_a.chromosome)//2)
 
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:]
-            new_chrom = list(set(new_chrom))    # Remove duplicated cities (genes) 
+            print(f' New Chrom : {new_chrom}')
 
+            new_chrom_clean = []
+            seen = set()
 
+            for city in new_chrom:
+                if city not in seen:
+                    new_chrom_clean.append(city)
+                    seen.add(city)
 
+            new_chrom = new_chrom_clean
+            print(f' new chrom clean : {new_chrom_clean}')
 
             # Complete the chromosome with remaining cities until he has a valid length
-            while len(new_chrom) != len(parent_a.chromosome) :
+            while len(new_chrom_clean) != len(parent_a.chromosome) :
                 cities_available = [city for city in possible_cities if city not in new_chrom]
+                print(f'CITIES AVAILABLE : {cities_available}')
                 new_chrom.append(random.choice(cities_available))
-
+                
+            print(f' New Chrom completed\n : {new_chrom}')
             new_indiv = Individual(new_chrom, cities.road_length(city_dict, new_chrom))
 
             number = random.random()
@@ -155,7 +165,7 @@ seed = random.seed()
 city_dict = cities.load_cities("cities.txt")
 solver = GASolver()
 solver.reset_population()
-solver.evolve_until(500, 393)    # Best obtainted : 391.79348316719285
+solver.evolve_until(500, 350)    # Best obtainted : 353.15448312209514
 best = solver.get_best_individual()
 print(best.chromosome)
 cities.draw_cities(city_dict, best.chromosome)
