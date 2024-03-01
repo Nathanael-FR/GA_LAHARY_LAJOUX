@@ -41,24 +41,71 @@ class GAProblem:
     def __init__(self):
         pass
 
-    def generate(self):
+    def generate(self) -> list:
+        """Generate a chromosome.
+
+        Returns:
+            list: chromosome as a list of genes.
+        """
         pass
 
-    def score(self, chromosome):
+    def score(self, chromosome) -> float:
+        """ Return a fitness score associated to a chromosome.
+
+        Args:
+            chromosome (list): A chromosome.
+
+        Returns:
+            float: the fitness score.
+        """
         pass
 
-    def reproduction(self, chromosome_parent_a, chromosome_parent_b):
+    def reversed_sort(self) -> bool:
+        """ True if the highest fitness score defines the best chromosome. False instead.
+
+        Returns:
+            bool: A boolean used when we sort chromosomes by their fitness score.
+        """
+        pass
+
+    def reproduction(self, chromosome_parent_a, chromosome_parent_b) -> list:
+        """ The reproduction of 2 chromosomes to give a new one.
+
+        Args:
+            chromosome_parent_a (list): A parent chromosome used for the reproduction
+            chromosome_parent_b (list): A second parent chromosome used for the reproduction
+
+        Returns:
+            list: The child chromosome from the reproduction of chromosome A and B.
+        """
         pass 
     
-    def mutation_point(self, chromosome):
-        return random.randrange(0, len(chromosome))
+    def reproduction_point(self, chromosome) -> int:
+        """ Defines where we cut the parents chromosomes. By default a random a point.
 
-    def mutation(self, chromosome):
+            i.e : We keep only the length of parent A to this point, and only from this point for parent B,
+                  then concatenate them.
+
+        Args:
+            chromosome (_type_): A chromosome used to know the length of a chromosome.
+
+        Returns:
+            int: The index of the reproduction point.
+        """
         pass
 
-    def reversed_sort(self):
-        return self._reverse
+    def mutation(self, chromosome) -> list:
+        """ Mutate a chromosome to give a different one.
 
+        Args:
+            chromosome (list): The chromosome ready to be mutated.
+
+        Returns:
+            list: The mutated chromosome
+        """
+        pass
+
+    
 
 
     
@@ -81,8 +128,13 @@ class GASolver:
         self._new_generations = []
         self._total_nb_gen = 0
 
-    def reset_population(self, pop_size=50):
-        """ Initialize the population with pop_size random Individuals """
+    def reset_population(self, pop_size=50) -> None:
+        """ Initialize the population with pop_size random Individuals
+
+        Args:
+            pop_size (int, optional): Size of the population of chromosomes that will
+                                      evolve through generations. Defaults to 50.
+        """
         for i in range(pop_size):
             chromosome = self._problem.generate()
             fitness = self._problem.score(chromosome)
@@ -90,7 +142,7 @@ class GASolver:
             new_individual = Individual(chromosome, fitness)
             self._population.append(new_individual)
 
-    def evolve_for_one_generation(self):
+    def evolve_for_one_generation(self) -> None:
         """ Apply the process for one generation : 
             -	Sort the population (Descending order)
             -	Selection: Remove x% of population (less adapted)
@@ -122,10 +174,11 @@ class GASolver:
             parent_a = self._population[selection_point] 
             parent_b = self._population[selection_point_2] 
 
-            x_point = self._problem.mutation_point(parent_a.chromosome)
+            x_point = self._problem.reproduction_point(parent_a.chromosome)
+            if x_point == None :
+                x_point = random.randrange(0, len(parent_a.chromosome))
 
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:] 
-            
             new_chrom = self._problem.reproduction(parent_a, parent_b, new_chrom)
             
             new_indiv = Individual(new_chrom, self._problem.score(new_chrom)) 
@@ -140,25 +193,24 @@ class GASolver:
             
             self._new_generations.append(new_indiv.fitness)
             self._total_nb_gen += 1
-
             mutants.append(new_indiv) 
             print(f'New generation : {new_indiv.fitness}')
 
         self._population = self._population + mutants 
 
 
-    def show_generation_summary(self):
+    def show_generation_summary(self) -> None:
         """ Print some debug information on the current state of the population """
 
         pass  # REPLACE WITH YOUR CODE
 
-    def get_best_individual(self):
+    def get_best_individual(self) -> object:
         """ Return the best Individual of the population """
         self._population.sort(reverse = self._problem.reversed_sort())
         print(self._population[0].fitness)
         return self._population[0]
 
-    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=None):
+    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=None) -> None:
         """ Launch the evolve_for_one_generation function until one of the two condition is achieved : 
             - Max nb of generation is achieved
             - The fitness of the best Individual is greater than or equal to

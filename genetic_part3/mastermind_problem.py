@@ -32,6 +32,9 @@ class MastermindProblem(GAProblem):
         # Given 2 parents, return a new chromosome. If pass, use default ga_solver reproduction function.
         return new_chrom
 
+    def reproduction_point(self, chromosome) -> int:
+        pass
+
     def mutation(self, new_chrom):
         # Given a chromsome, mutate him to a new chromosome.
         valid_genes = mm.get_possible_colors()

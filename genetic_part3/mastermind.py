@@ -86,6 +86,7 @@ class MastermindMatch:
         correct_position = 0
         correct_colors = 0
         for i, color in enumerate(guess):
+            # print(guess)
             if self._secret[i] == color:
                 correct_position += 1
             elif color in self._secret:

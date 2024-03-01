@@ -32,8 +32,6 @@ class TSProblem(GAProblem):
     def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
         # Given 2 parents, return a new chromosome. If pass, use default ga_solver reproduction function.
 
-         
-
         new_chrom_clean = []
         seen = set()
 
