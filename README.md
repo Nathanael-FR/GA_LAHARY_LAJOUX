@@ -58,7 +58,7 @@ class YourProblem(GAProblem):
         super().__init__()
         
     def generate(self):
-        """Generate a random guess as a chromosome."""
+        """Generate a chromosome."""
         pass # Write your code
     
     def score(self, chromosome):
@@ -78,7 +78,7 @@ class YourProblem(GAProblem):
         
             You may edit edit the reproduction to fit your problem.
 
-            i.e : A gene can be duplicated in the child chromosome. 
+            i.e : A gene can be duplicated in the child chromosome with the default reproduction. 
         """
         return chromosome_child # Write your code
 
