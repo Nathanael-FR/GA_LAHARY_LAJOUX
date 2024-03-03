@@ -68,7 +68,7 @@ class GAProblem:
         """
         pass
 
-    def reproduction(self, chromosome_parent_a, chromosome_parent_b) -> list:
+    def reproduction(self, chromosome_parent_a, chromosome_parent_b, chromosome_child) -> list:
         """ The reproduction of 2 chromosomes to give a new one.
 
         Args:
@@ -78,8 +78,7 @@ class GAProblem:
         Returns:
             list: The child chromosome from the reproduction of chromosome A and B.
         """
-        pass 
-    
+        pass    
     def reproduction_point(self, chromosome) -> int:
         """ Defines where we cut the parents chromosomes. By default a random a point.
 
@@ -87,7 +86,7 @@ class GAProblem:
                   then concatenate them.
 
         Args:
-            chromosome (_type_): A chromosome used to know the length of a chromosome.
+            chromosome (list): A chromosome used to know the length of a chromosome.
 
         Returns:
             int: The index of the reproduction point.
@@ -116,7 +115,7 @@ class GASolver:
         """Initializes an instance of a ga_solver for a given GAProblem
 
         Args:
-            problem (GAProblem): GAProblem to be solved by this ga_solver
+            problem (GAProblem): A GAProblem to be solved by the GASolvers.
             selection_rate (float, optional): Selection rate between 0 and 1.0. Defaults to 0.5.
             mutation_rate (float, optional): mutation_rate between 0 and 1.0. Defaults to 0.1.
         """
@@ -127,6 +126,7 @@ class GASolver:
         self._population = []
         self._new_generations = []
         self._population_disparity = []
+
     def reset_population(self, pop_size=50) -> None:
         """ Initialize the population with pop_size random Individuals
 
@@ -150,22 +150,24 @@ class GASolver:
                 mutation_rate i.e., mutate it if a random value is below   
                 mutation_rate
         """
+
+        # Compute homogeneity of chromsome
         chromosomes = []
         for i in range(len(self._population)):
             chromosomes.append(self._population[i].chromosome)
 
-        disparity = len(list(set(tuple(i) for i in chromosomes)))/len(chromosomes)
-        print(disparity)
-        
-        self._population_disparity.append(disparity)
+        homogeneity = len(list(set(tuple(i) for i in chromosomes)))/len(chromosomes)
+        self._population_disparity.append(homogeneity)
+
 
         self._population.sort(reverse = self._problem.reversed_sort())
+
         # Keep the upper half based on fitness score.
         self._population = self._population[0:int(self._selection_rate*len(self._population))]
         mutants = [] 
 
 
-        # REPRODUCTION (1/2) :  between 2 parents randomly chosen.
+        # REPRODUCTION (1/2) :  
         for i in range(len(self._population)): 
             
             selection_point = 0 
@@ -208,17 +210,18 @@ class GASolver:
         """ Print some debug information on the current state of the population """
         fig, (ax1, ax2) = plt.subplots(2)
 
-        # Plot the evolution of population disparity
+        # Plot the evolution of population homogeneity
         ax1.plot(range(nb_gen), self._population_disparity)
         ax1.set_xlabel('Number of Generations')
-        ax1.set_ylabel('Population disparity')
-        ax1.set_title('Evolution of Population disparity')
+        ax1.set_ylabel('Population homogeneity')
+        ax1.set_title('Evolution of Population homogeneity')
 
         # Plot the evolution of the best individual score through generations
         ax2.plot(range(nb_gen), best_individuals)
         ax2.set_xlabel('Number of Generations')
         ax2.set_ylabel('Fitness Score of Best Individual')
         ax2.set_title('Evolution of Best Individual Fitness')
+        ax2.text(nb_gen, best_individuals[-1], f'Best fitness:\n{best_individuals[-1]}')
         if not self._problem.reversed_sort():
             ax2.invert_yaxis()  # Inverse the y-axis
 
@@ -226,7 +229,7 @@ class GASolver:
         plt.show()
 
 
-    def get_best_individual(self) -> object:
+    def get_best_individual(self) -> Individual:
         """ Return the best Individual of the population """
         self._population.sort(reverse = self._problem.reversed_sort())
         return self._population[0]

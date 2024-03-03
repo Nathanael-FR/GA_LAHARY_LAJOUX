@@ -33,12 +33,12 @@ class TSProblem(GAProblem):
         """        
         return len(chromosome)//2
 
-    def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
+    def reproduction(self, chromosome_parent_a, chromosome_parent_b, chromosome_child):
         """Perform reproduction between two parent chromosomes and return a new chromosome."""
         new_chrom_clean = []
         seen = set()
 
-        for city in new_chrom:
+        for city in chromosome_child:
             if city not in seen:
                 new_chrom_clean.append(city)
                 seen.add(city)

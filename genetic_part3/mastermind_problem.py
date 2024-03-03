@@ -29,9 +29,9 @@ class MastermindProblem(GAProblem):
         """Return True if the highest fitness score is considered the best fit, False otherwise."""
         return True
 
-    def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
+    def reproduction(self, chromosome_parent_a, chromosome_parent_b, chromosome_child):
         """Perform reproduction between two parent chromosomes and return a new chromosome."""
-        return new_chrom
+        return chromosome_child
 
     def reproduction_point(self, chromosome) -> int:
         """Return the reproduction point for the chromosomes.
