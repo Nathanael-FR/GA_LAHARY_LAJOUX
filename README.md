@@ -44,6 +44,26 @@ from ga_solver import GAProblem, GASolver
 # Define your own problem class
 class MyProblem(GAProblem):
     # Implement the necessary methods
+    def __init__(self):
+        super().__init__()
+        
+    def generate(self) -> list:
+        pass
+    
+    def score(self, chromosome) -> float:
+        pass
+    
+    def reversed_sort(self) -> bool:
+        pass
+
+    def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom) -> list:
+        pass
+
+    def reproduction_point(self, chromosome) -> int:
+        pass
+
+    def mutation(self, new_chrom) -> list:
+        pass
 
 # Instantiate the solver with your problem
 solver = GASolver(MyProblem())
