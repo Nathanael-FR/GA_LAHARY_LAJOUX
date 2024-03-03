@@ -56,7 +56,6 @@ class GASolver:
             fitness = cities.road_length(city_dict, chromosome)
             new_individual = Individual(chromosome, fitness)
             self._population.append(new_individual)
-            print(chromosome)
 
     def evolve_for_one_generation(self):
         """ Apply the process for one generation : 
@@ -93,10 +92,9 @@ class GASolver:
             # print(f' Parent A : {parent_a}\n')
             # print(f' Parent B : {parent_b}')
 
-            x_point = random.randrange(0, len(parent_a.chromosome)//2)
+            x_point = len(parent_a.chromosome)//2
 
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:]
-            print(f' New Chrom : {new_chrom}')
 
             new_chrom_clean = []
             seen = set()
@@ -107,15 +105,12 @@ class GASolver:
                     seen.add(city)
 
             new_chrom = new_chrom_clean
-            print(f' new chrom clean : {new_chrom_clean}')
 
             # Complete the chromosome with remaining cities until he has a valid length
             while len(new_chrom_clean) != len(parent_a.chromosome) :
                 cities_available = [city for city in possible_cities if city not in new_chrom]
-                print(f'CITIES AVAILABLE : {cities_available}')
                 new_chrom.append(random.choice(cities_available))
                 
-            print(f' New Chrom completed\n : {new_chrom}')
             new_indiv = Individual(new_chrom, cities.road_length(city_dict, new_chrom))
 
             number = random.random()
@@ -144,7 +139,6 @@ class GASolver:
     def get_best_individual(self):
         """ Return the best Individual of the population """
         self._population.sort()
-        print(self._population[0].fitness)
         return self._population[0]
 
     def evolve_until(self, max_nb_of_generations=500, threshold_fitness=None):
@@ -165,7 +159,8 @@ seed = random.seed()
 city_dict = cities.load_cities("cities.txt")
 solver = GASolver()
 solver.reset_population()
-solver.evolve_until(500, 350)    # Best obtainted : 353.15448312209514
+solver.evolve_until(1000, 349)    # Best obtainted : 349.8772964447585
 best = solver.get_best_individual()
 print(best.chromosome)
+print(best.fitness)
 cities.draw_cities(city_dict, best.chromosome)
