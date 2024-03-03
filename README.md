@@ -4,7 +4,7 @@ authors : Nathanaël Lahary & Malo Lajous.
 
 This program is a generic implementation of a genetic algorithm (GA) in Python. Genetic algorithm is an optimization method based on principles of natural selection and genetics. It is used to find the best possible solutions to a given problem using concepts inspired by biological evolution.
 
-2 examples (TSP and Mastermind) are provided so you can find how this algorithm can your problem.
+2 examples (TSP and Mastermind) are provided so you can find how this algorithm can solve your problem.
 
 ## Operation
 
