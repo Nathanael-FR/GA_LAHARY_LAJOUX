@@ -17,12 +17,12 @@ class YourProblem(GAProblem):
     def __init__(self):
         super().__init__()
         
-    def generate(self):
-        """Generate a random guess as a chromosome."""
+    def generate(self) -> list:
+        """Generate a chromosome."""
 
         pass # Write your code
     
-    def score(self, chromosome):
+    def score(self, chromosome) -> float:
         """Return the fitness score associated with a chromosome."""
         pass # Write your code
 

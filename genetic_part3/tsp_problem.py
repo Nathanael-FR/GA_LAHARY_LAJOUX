@@ -17,24 +17,36 @@ class TSProblem(GAProblem):
         super().__init__()
         
     def generate(self):
-        """Generate a random guess as a chromosome."""
+        """Generate a chromosome.
+        
+            Here a a chromosome is a random path across all the cities.
+        """
 
         chromosome = cities.default_road(city_dict)
         random.shuffle(chromosome)
         return chromosome
     
     def score(self, chromosome):
-        """Return the fitness score associated with a chromosome."""
+        """Return the fitness score associated with a chromosome.
+        
+            Here the fitness score means the path length.
+        """
         return cities.road_length(city_dict, chromosome)
 
     def reproduction_point(self, chromosome):
         """Return the reproduction point for the chromosomes.
            By default pick a random point
+
+           Here we want the index to be the middle of the parents chromosomes.
         """        
         return len(chromosome)//2
 
     def reproduction(self, chromosome_parent_a, chromosome_parent_b, chromosome_child):
-        """Perform reproduction between two parent chromosomes and return a new chromosome."""
+        """Perform reproduction between two parents chromosomes and return a new chromosome.
+        
+            Here we want to get rid of the duplicated cities after the reproduction, and then fill the 
+            path with the cities remaining.
+        """
         new_chrom_clean = []
         seen = set()
 
@@ -52,14 +64,20 @@ class TSProblem(GAProblem):
         return new_chrom_clean
 
     def mutation(self, new_chrom):
-        """Mutate a chromosome to create a new one."""
+        """Mutate a chromosome to create a new one.
+        
+            Here we want to exchange 2 cities in the path to mutate the chromosome.
+        """
 
         mutation_points = random.sample(range(len(new_chrom)), 2)
         new_chrom[mutation_points[0]], new_chrom[mutation_points[1]] = new_chrom[mutation_points[1]], new_chrom[mutation_points[0]]
         return new_chrom
     
     def reversed_sort(self):
-        """Return True if the highest fitness score is considered the best fit, False otherwise."""
+        """Return True if the highest fitness score is considered the best fit, False otherwise.
+        
+            Here we want to find the shortest path. So the lowest the fitness score the best it is.
+        """
         return False 
 
 if __name__ == '__main__':
@@ -71,5 +89,4 @@ if __name__ == '__main__':
     solver = GASolver(problem)
     solver.reset_population()
     solver.evolve_until(max_nb_of_generations=500, threshold_fitness=349) 
-    # cities.draw_cities(city_dict, solver.getBestIndiv().chromosome)
     cities.draw_cities(city_dict, solver.get_best_individual().chromosome)
