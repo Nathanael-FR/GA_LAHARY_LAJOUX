@@ -1,6 +1,7 @@
 # GA Solver
 
-authors : Nathanaël Lahary & Malo
+authors : Nathanaël Lahary & Malo Lajous.
+
 This program is a generic implementation of a genetic algorithm (GA) in Python. Genetic algorithm is an optimization method based on principles of natural selection and genetics. It is used to find the best possible solutions to a given problem using concepts inspired by biological evolution.
 
 ## Operation
