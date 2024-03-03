@@ -126,8 +126,7 @@ class GASolver:
         self._mutation_rate = mutation_rate
         self._population = []
         self._new_generations = []
-        self._total_nb_gen = 0
-
+        self._population_disparity = []
     def reset_population(self, pop_size=50) -> None:
         """ Initialize the population with pop_size random Individuals
 
@@ -138,7 +137,8 @@ class GASolver:
         for i in range(pop_size):
             chromosome = self._problem.generate()
             fitness = self._problem.score(chromosome)
-
+            # print(chromosome)
+            # print(fitness)
             new_individual = Individual(chromosome, fitness)
             self._population.append(new_individual)
 
@@ -152,10 +152,10 @@ class GASolver:
                 mutation_rate i.e., mutate it if a random value is below   
                 mutation_rate
         """
+        
         self._population.sort(reverse = self._problem.reversed_sort())
         # Keep the upper half based on fitness score.
         self._population = self._population[0:int(self._selection_rate*len(self._population))]
-
         mutants = [] 
 
 
@@ -178,9 +178,10 @@ class GASolver:
             if x_point == None :
                 x_point = random.randrange(0, len(parent_a.chromosome))
 
+          
             new_chrom = parent_a.chromosome[0:x_point] + parent_b.chromosome[x_point:] 
             new_chrom = self._problem.reproduction(parent_a, parent_b, new_chrom)
-            
+
             new_indiv = Individual(new_chrom, self._problem.score(new_chrom)) 
 
             # MUTATION (2/2) : 
@@ -194,20 +195,26 @@ class GASolver:
             self._new_generations.append(new_indiv.fitness)
             self._total_nb_gen += 1
             mutants.append(new_indiv) 
-            print(f'New generation : {new_indiv.fitness}')
+            # print(f'New generation : {new_indiv.fitness}')
 
         self._population = self._population + mutants 
 
 
-    def show_generation_summary(self) -> None:
+    def show_generation_summary(self, nb_gen, best_individuals) -> None:
         """ Print some debug information on the current state of the population """
 
-        pass  # REPLACE WITH YOUR CODE
+        plt.plot(range(nb_gen), best_individuals)
+        plt.xlabel('Number of Generations')
+        plt.ylabel('Fitness Score of Best Individual')
+        plt.title('Evolution of Best Individual Fitness')
+        if not self._problem.reversed_sort() :
+            plt.gca().invert_yaxis()  # Inverse the y-axis
+        plt.show()
 
     def get_best_individual(self) -> object:
         """ Return the best Individual of the population """
         self._population.sort(reverse = self._problem.reversed_sort())
-        print(self._population[0].fitness)
+        # print(self._population[0].fitness)
         return self._population[0]
 
     def evolve_until(self, max_nb_of_generations=500, threshold_fitness=None) -> None:
@@ -216,10 +223,13 @@ class GASolver:
             - The fitness of the best Individual is greater than or equal to
               threshold_fitness
         """
+        total_best_ind = []
         for i in range(max_nb_of_generations):
             self.evolve_for_one_generation()
             best_individual = self.get_best_individual()
+            total_best_ind.append(best_individual.fitness)
             if (threshold_fitness != None) and (best_individual.fitness <= threshold_fitness) :
                 print(f'Found : {best_individual}')
                 break
         print(f"Best individual : {self.get_best_individual()}")
+        self.show_generation_summary(max_nb_of_generations, total_best_ind)

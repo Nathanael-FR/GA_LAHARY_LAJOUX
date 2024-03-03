@@ -17,26 +17,31 @@ class MastermindProblem(GAProblem):
         super().__init__()
         
     def generate(self):
+        """Generate a random guess as a chromosome."""
         chromosome = match.generate_random_guess()
         return chromosome
     
     def score(self, chromosome):
-        # Given a chromosome, return his fitness score
+        """Return the fitness score associated with a chromosome."""
         return match.rate_guess(chromosome)
     
     def reversed_sort(self):
-        # True if the highest fitness score is the best fit. False instead.
+        """Return True if the highest fitness score is considered the best fit, False otherwise."""
         return True
 
     def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
-        # Given 2 parents, return a new chromosome. If pass, use default ga_solver reproduction function.
+        """Perform reproduction between two parent chromosomes and return a new chromosome."""
         return new_chrom
 
     def reproduction_point(self, chromosome) -> int:
+        """Return the reproduction point for the chromosomes.
+           By default pick a random point
+        """
         pass
 
+
     def mutation(self, new_chrom):
-        # Given a chromsome, mutate him to a new chromosome.
+        """Mutate a chromosome to create a new one."""
         valid_genes = mm.get_possible_colors()
         new_gene = random.choice(valid_genes) 
                 

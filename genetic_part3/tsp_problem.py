@@ -19,6 +19,7 @@ class TSProblem(GAProblem):
     def generate(self):
         chromosome = cities.default_road(city_dict)
         random.shuffle(chromosome)
+        # print(chromosome)
         return chromosome
     
     def score(self, chromosome):
@@ -27,11 +28,10 @@ class TSProblem(GAProblem):
 
     def reproduction_point(self, chromosome):
         # Index that split parents genes
-        return random.randrange(0, len(chromosome)//2)
+        return len(chromosome)//2
 
     def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
         # Given 2 parents, return a new chromosome. If pass, use default ga_solver reproduction function.
-
         new_chrom_clean = []
         seen = set()
 
@@ -51,14 +51,9 @@ class TSProblem(GAProblem):
     def mutation(self, new_chrom):
         # Given a chromsome, mutate him to a new chromosome.
 
-        mutation_point = 0
-        mutation_point_2 = 0
+        mutation_points = random.sample(range(len(new_chrom)), 2)
 
-        while (mutation_point == mutation_point_2):   
-            mutation_point = random.randrange(0, len(new_chrom))
-            mutation_point_2 = random.randrange(0, len(new_chrom))
-                
-        new_chrom[mutation_point], new_chrom[mutation_point_2] = new_chrom[mutation_point_2], new_chrom[mutation_point]
+        new_chrom[mutation_points[0]], new_chrom[mutation_points[1]] = new_chrom[mutation_points[1]], new_chrom[mutation_points[0]]
         return new_chrom
     
     def reversed_sort(self):
@@ -73,6 +68,6 @@ if __name__ == '__main__':
     problem = TSProblem()
     solver = GASolver(problem)
     solver.reset_population()
-    solver.evolve_until(max_nb_of_generations=1000, threshold_fitness=340)
+    solver.evolve_until(max_nb_of_generations=500, threshold_fitness=350) 
     # cities.draw_cities(city_dict, solver.getBestIndiv().chromosome)
     cities.draw_cities(city_dict, solver.get_best_individual().chromosome)
