@@ -17,21 +17,24 @@ class TSProblem(GAProblem):
         super().__init__()
         
     def generate(self):
+        """Generate a random guess as a chromosome."""
+
         chromosome = cities.default_road(city_dict)
         random.shuffle(chromosome)
-        # print(chromosome)
         return chromosome
     
     def score(self, chromosome):
-        # Given a chromosome, return his fitness score
+        """Return the fitness score associated with a chromosome."""
         return cities.road_length(city_dict, chromosome)
 
     def reproduction_point(self, chromosome):
-        # Index that split parents genes
+        """Return the reproduction point for the chromosomes.
+           By default pick a random point
+        """        
         return len(chromosome)//2
 
     def reproduction(self, chromosome_parent_a, chromosome_parent_b, new_chrom):
-        # Given 2 parents, return a new chromosome. If pass, use default ga_solver reproduction function.
+        """Perform reproduction between two parent chromosomes and return a new chromosome."""
         new_chrom_clean = []
         seen = set()
 
@@ -49,15 +52,14 @@ class TSProblem(GAProblem):
         return new_chrom_clean
 
     def mutation(self, new_chrom):
-        # Given a chromsome, mutate him to a new chromosome.
+        """Mutate a chromosome to create a new one."""
 
         mutation_points = random.sample(range(len(new_chrom)), 2)
-
         new_chrom[mutation_points[0]], new_chrom[mutation_points[1]] = new_chrom[mutation_points[1]], new_chrom[mutation_points[0]]
         return new_chrom
     
     def reversed_sort(self):
-        # True if the highest fitness score is the best fit. True instead.
+        """Return True if the highest fitness score is considered the best fit, False otherwise."""
         return False 
 
 if __name__ == '__main__':
@@ -68,6 +70,6 @@ if __name__ == '__main__':
     problem = TSProblem()
     solver = GASolver(problem)
     solver.reset_population()
-    solver.evolve_until(max_nb_of_generations=500, threshold_fitness=350) 
+    solver.evolve_until(max_nb_of_generations=500, threshold_fitness=349) 
     # cities.draw_cities(city_dict, solver.getBestIndiv().chromosome)
     cities.draw_cities(city_dict, solver.get_best_individual().chromosome)
