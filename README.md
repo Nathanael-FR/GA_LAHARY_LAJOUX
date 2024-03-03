@@ -33,7 +33,7 @@ The `GASolver` class takes a specific problem defined by an instance of `GAProbl
 
 To use the GA Solver, follow these steps:
 
-1. Define your own problem class by inheriting from `GAProblem` and implement the necessary methods.
+1. Define your own problem class by inheriting from `GAProblem` and implement the necessary methods. Make sure to check the documentation of each method of the `GAProblem` class for a better understanding of the expected outputs.
 2. Instantiate a `GASolver` object by passing your defined problem.
 3. Call the `reset_population()` and `evolve_until()` methods to solve the problem.
 
